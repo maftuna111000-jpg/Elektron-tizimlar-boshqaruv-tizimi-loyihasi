@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Axborot tizimi</title>
+<style>
+:root{--bg:#f3f6f8;--card:#fff;--tx:#14212b;--mut:#5c6b77;--bd:#dbe3e8;--side:#12303d;--sidetx:#cfe0e8;--pri:#0b6e8a;--prib:#e1f1f6;--ok:#1c7a4a;--okb:#e0f3e8;--err:#b3342d;--errb:#fbe7e5;--warn:#9a6208;--warnb:#fbefd5;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1a21;--card:#162630;--tx:#e6eef2;--mut:#93a6b2;--bd:#27404d;--side:#0a1319;--sidetx:#a9bfca;--pri:#4cb6d4;--prib:#183846;--ok:#5dc690;--okb:#173b2a;--err:#f0827b;--errb:#40201e;--warn:#e6b15a;--warnb:#3b2d12;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0e1a21;--card:#162630;--tx:#e6eef2;--mut:#93a6b2;--bd:#27404d;--side:#0a1319;--sidetx:#a9bfca;--pri:#4cb6d4;--prib:#183846;--ok:#5dc690;--okb:#173b2a;--err:#f0827b;--errb:#40201e;--warn:#e6b15a;--warnb:#3b2d12;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:15px/1.5 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--tx);padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 12px}p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.btn{border:1px solid var(--bd);background:var(--card);padding:7px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--pri)}.btn:disabled{opacity:.5;cursor:wait}
+.btn.p{background:var(--pri);border-color:var(--pri);color:#fff}[data-theme=dark] .btn.p{color:#062129}
+.btn.d{color:var(--err)}.btn.s{padding:4px 10px;font-size:13px}
+input[type=text],input[type=email],input[type=password],input[type=search],select{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card)}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px}
+.acard{width:100%;max-width:400px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:26px}
+.tabs{display:flex;gap:4px;margin:16px 0 4px;border-bottom:1px solid var(--bd)}
+.tabs button{flex:1;border:0;background:none;padding:9px 4px;cursor:pointer;color:var(--mut);border-bottom:2px solid transparent}
+.tabs button.on{color:var(--pri);border-color:var(--pri);font-weight:600}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.side{background:var(--side);color:var(--sidetx);padding:18px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:2px}
+.side .brand{color:#fff;font-weight:700;font-size:17px;padding:4px 10px 16px}
+.side button.nav{all:unset;box-sizing:border-box;display:block;width:100%;padding:9px 12px;border-radius:8px;cursor:pointer}
+.side button.nav:hover{background:rgba(255,255,255,.07)}
+.side button.nav.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+.side .sp{flex:1}
+.main{padding:20px 24px 40px;min-width:0}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:18px}.top .grow{flex:1}
+.burger{display:none}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.stat b{display:block;font-size:26px;line-height:1.1}.stat span{color:var(--mut);font-size:13px}
+.two{display:grid;grid-template-columns:3fr 2fr;gap:14px}
+.bars{display:flex;align-items:flex-end;gap:5px;height:130px}
+.bars i{flex:1;background:var(--pri);border-radius:4px 4px 0 0;min-height:3px;opacity:.85}
+.bl{display:flex;gap:5px;font-size:11px;color:var(--mut);margin-top:4px}.bl span{flex:1;text-align:center}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{font-size:13px;color:var(--mut);font-weight:600}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.bar>*{width:auto}.bar input{flex:1;min-width:180px}
+.pill{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;background:var(--prib);color:var(--pri);margin-right:4px}
+.pill.ok{background:var(--okb);color:var(--ok)}.pill.err{background:var(--errb);color:var(--err)}.pill.w{background:var(--warnb);color:var(--warn)}
+.pg{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:12px;color:var(--mut);font-size:13px}
+.empty{padding:30px;text-align:center;color:var(--mut)}
+.banner{background:var(--warnb);color:var(--warn);padding:8px 14px;font-size:13px}
+.ov{position:fixed;inset:0;background:rgba(5,15,20,.55);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--card);border-radius:14px;padding:20px;width:100%;max-width:640px;max-height:88vh;overflow:auto;border:1px solid var(--bd)}
+.mx{display:grid;grid-template-columns:minmax(110px,1fr) repeat(7,52px);align-items:center;font-size:13px;min-width:480px}
+.mx>*{padding:7px 4px;border-bottom:1px solid var(--bd);text-align:center}.mx>.r{text-align:left;font-weight:600}
+.mx>.h{color:var(--mut);font-size:12px}.mx input{width:17px;height:17px;accent-color:var(--pri)}.mx .na{color:var(--bd)}
+.chk{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd);color:var(--tx);font-size:15px;margin:0}
+.chk input{width:18px;height:18px;accent-color:var(--pri)}
+#toasts{position:fixed;right:14px;bottom:14px;display:grid;gap:8px;z-index:30}
+.toast{background:var(--tx);color:var(--bg);padding:10px 14px;border-radius:9px;max-width:320px;font-size:14px}.toast.err{background:var(--err);color:#fff}
+.ferr{color:var(--err);font-size:13px;margin-top:12px}
+.sw{display:flex;gap:10px;align-items:center;margin-top:14px}.sw input{width:18px;height:18px;accent-color:var(--pri)}
+@media (max-width:860px){
+.shell{grid-template-columns:1fr}.side{position:fixed;left:0;top:0;z-index:15;width:240px;transform:translateX(-100%);transition:transform .2s}
+.side.open{transform:none}.burger{display:inline-block}.two{grid-template-columns:1fr}.main{padding:14px}}
+@media (prefers-reduced-motion:reduce){.side{transition:none}}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="modal"></div><div id="toasts"></div>
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = d => d ? new Date(d).toLocaleString("uz-UZ", {dateStyle:"short", timeStyle:"short"}) : "—";
+const S = {me:null, page:"dashboard", tab:"login", demo:false, d:null, err:null, pg:{users:1, logs:1}, q:{users:"", logs:"", st:""}, open:false, token:null};
+const ST = {ACTIVE:["Faol","ok"], PENDING:["Tasdiqlanmagan","w"], BLOCKED:["Bloklangan","err"]};
+const ACTS = ["create","read","update","delete","approve","export","manage"];
+const ACT_UZ = {create:"Yaratish", read:"Ko’rish", update:"Tahrirlash", delete:"O’chirish", approve:"Tasdiqlash", export:"Eksport", manage:"Boshqarish"};
+const RES_UZ = {users:"Foydalanuvchilar", roles:"Rollar", permissions:"Ruxsatlar", audit_logs:"Audit loglar", settings:"Sozlamalar", dashboard:"Dashboard", profile:"Profil", records:"Ma’lumotlar"};
+const NAV = [["dashboard","Dashboard","dashboard:read"],["users","Foydalanuvchilar","users:read"],["roles","Rollar","roles:read"],["permissions","Ruxsatlar","permissions:read"],["logs","Audit loglar","audit_logs:read"],["settings","Sozlamalar","settings:read"],["profile","Profil","profile:read"]];
+const can = k => S.me && (S.me.permissions.includes(k) || S.me.permissions.includes(k.split(":")[0] + ":manage")); // faqat menyu uchun; haqiqiy tekshiruv serverda
+
+/* ---------- API (haqiqiy yoki demo) ---------- */
+async function api(m, p, b) {
+  if (S.demo) { await new Promise(r => setTimeout(r, 120)); return demo(m, p, b); }
+  const r = await fetch("/api" + p, {method:m, credentials:"same-origin", headers:{"Content-Type":"application/json"}, body:b ? JSON.stringify(b) : undefined});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const e = j.error || {}; const f = e.fields ? Object.values(e.fields)[0] : "";
+    const x = new Error((e.message || "Xatolik") + (f ? ": " + f : "")); x.status = r.status; x.code = e.code; throw x;
+  }
+  return j;
+}
+
+/* ---------- Demo rejim (backend yo’q bo’lganda; xotirada) ---------- */
+const CAT = {users:["create","read","update","delete","export","manage"], roles:["create","read","update","delete","manage"], permissions:["create","read","update","delete","manage"], audit_logs:["read","export"], settings:["read","update"], dashboard:["read"], profile:["read","update"], records:ACTS};
+const DB = (() => {
+  const perms = []; let i = 0;
+  for (const [r, a] of Object.entries(CAT)) for (const x of a) perms.push({id:"p" + (++i), resource:r, action:x});
+  const ids = f => perms.filter(p => f(p)).map(p => p.id);
+  const rec = ids(p => p.resource === "records"), prof = ids(p => p.resource === "profile");
+  const roles = [
+    {id:"r1", name:"SUPER_ADMIN", displayName:"Super administrator", level:100, isSystem:true, permissionIds:ids(() => true)},
+    {id:"r2", name:"ADMIN", displayName:"Administrator", level:80, isSystem:true, permissionIds:[...ids(p => ["users","roles"].includes(p.resource) && !["manage","delete"].includes(p.action) || ["dashboard","audit_logs","settings","permissions"].includes(p.resource) && p.action === "read"), ...rec, ...prof]},
+    {id:"r3", name:"MANAGER", displayName:"Menejer", level:60, isSystem:true, permissionIds:[...ids(p => ["users","dashboard"].includes(p.resource) && p.action === "read"), ...rec, ...prof]},
+    {id:"r4", name:"OPERATOR", displayName:"Operator", level:40, isSystem:true, permissionIds:[...ids(p => p.resource === "records" && ["create","read","update"].includes(p.action)), ...prof]},
+    {id:"r5", name:"USER", displayName:"Foydalanuvchi", level:10, isSystem:true, permissionIds:prof}];
+  const names = ["Super Admin","Dilshod Karimov","Malika Yusupova","Jasur Toshmatov","Nigora Aliyeva","Bobur Rahimov","Sevara Qodirova","Otabek Ergashev"];
+  const rl = ["r1","r2","r3","r4","r5","r5","r4","r5"], stt = ["ACTIVE","ACTIVE","ACTIVE","ACTIVE","ACTIVE","PENDING","BLOCKED","ACTIVE"];
+  const users = names.map((n, k) => ({id:"u" + (k + 1), fullName:n, email:k ? n.split(" ")[1].toLowerCase() + "@example.uz" : "admin@example.uz", phone:null, status:stt[k], emailVerifiedAt:stt[k] === "PENDING" ? null : new Date().toISOString(), lastLoginAt:null, createdAt:new Date(Date.now() - k * 86400000 * 2).toISOString(), roleIds:[rl[k]]}));
+  return {perms, roles, users, logs:[], settings:{siteName:"Axborot tizimi", registrationEnabled:true}, uid:1};
+})();
+const dlog = (a, actor) => DB.logs.unshift({id:"l" + Math.random(), action:a, createdAt:new Date().toISOString(), actor:actor ? {email:actor.email, fullName:actor.fullName} : null});
+["auth.login","user.block","role.permissions.set","auth.register"].forEach((a, k) => dlog(a, DB.users[k % 3]));
+const dview = u => ({...u, roles:u.roleIds.map(id => DB.roles.find(r => r.id === id))});
+function demo(m, p, b) {
+  const [path, qs] = p.split("?"), q = Object.fromEntries(new URLSearchParams(qs || "")), D = DB, E = (t, s = 400) => { const e = new Error(t); e.status = s; throw e; };
+  const cur = () => D.users.find(u => u.id === D.uid) || E("Tizimga kiring", 401);
+  const page = (arr, ps) => { const pg = +q.page || 1; return {items:arr.slice((pg - 1) * ps, pg * ps), total:arr.length, page:pg, pageSize:ps}; };
+  let x;
+  if (path === "/auth/login") {
+    const u = D.users.find(v => v.email === (b.email || "").toLowerCase());
+    if (!u || b.password !== "Admin12345") E("Email yoki parol noto’g’ri", 401);
+    if (u.status === "PENDING") E("Email manzilingiz tasdiqlanmagan", 403);
+    if (u.status === "BLOCKED") E("Hisobingiz bloklangan", 403);
+    D.uid = u.id; u.lastLoginAt = new Date().toISOString(); dlog("auth.login", u); return {user:u};
+  }
+  if (path === "/auth/register") {
+    if (D.users.some(u => u.email === b.email)) E("Bu email bilan allaqachon ro’yxatdan o’tilgan", 409);
+    D.users.push({id:"u" + Date.now(), fullName:b.fullName, email:b.email, phone:b.phone || null, status:"PENDING", emailVerifiedAt:null, createdAt:new Date().toISOString(), roleIds:["r5"]});
+    return {message:"Tasdiqlash havolasi yuborildi"};
+  }
+  if (["/auth/forgot-password","/auth/verify-email","/auth/reset-password","/profile/password"].includes(path)) return {message:"Bajarildi (demo)"};
+  if (path === "/auth/logout") { D.uid = null; return {ok:true}; }
+  const me = cur(), myPerms = D.roles.filter(r => me.roleIds.includes(r.id)).flatMap(r => r.permissionIds).map(id => { const t = D.perms.find(v => v.id === id); return t.resource + ":" + t.action; });
+  if (path === "/auth/me") return {...me, roles:dview(me).roles.map(r => r.name), permissions:myPerms};
+  if (path === "/profile") { if (m === "PATCH") Object.assign(me, {fullName:b.fullName, phone:b.phone}); return dview(me); }
+  if (path === "/users") { let a = D.users.filter(u => (!q.status || u.status === q.status) && (!q.q || (u.fullName + u.email).toLowerCase().includes(q.q.toLowerCase()))); const r = page(a, 5); r.items = r.items.map(dview); return r; }
+  if (x = path.match(/^\/users\/(\w+)\/(status|roles)$/)) {
+    const u = D.users.find(v => v.id === x[1]) || E("Topilmadi", 404);
+    if (u.id === me.id) E("O’zingizning holatingiz yoki rolingizni o’zgartira olmaysiz", 403);
+    if (x[2] === "status") { u.status = b.status; dlog("user." + b.status.toLowerCase(), me); } else { u.roleIds = b.roleIds; dlog("user.roles.set", me); }
+    return dview(u);
+  }
+  if (x = path.match(/^\/users\/(\w+)$/)) {
+    const k = D.users.findIndex(v => v.id === x[1]);
+    if (k < 0 || D.users[k].id === me.id) E("O’zingizni o’chira olmaysiz", 403);
+    D.users.splice(k, 1); dlog("user.delete", me); return {ok:true};
+  }
+  if (path === "/roles") return D.roles.map(r => ({...r, userCount:D.users.filter(u => u.roleIds.includes(r.id)).length}));
+  if (x = path.match(/^\/roles\/(\w+)\/permissions$/)) {
+    const r = D.roles.find(v => v.id === x[1]) || E("Topilmadi", 404);
+    if (r.level >= Math.max(...me.roleIds.map(i => D.roles.find(v => v.id === i).level))) E("Bu rolni boshqarishga vakolatingiz yetmaydi", 403);
+    r.permissionIds = b.permissionIds; dlog("role.permissions.set", me); return {ok:true};
+  }
+  if (path === "/permissions") return D.perms;
+  if (path === "/audit-logs") return page(D.logs.filter(l => !q.q || (l.action + (l.actor?.email || "")).includes(q.q)), 6);
+  if (path === "/dashboard") {
+    const days = [...Array(14)].map((_, k) => new Date(Date.now() - (13 - k) * 86400000).toISOString().slice(0, 10));
+    return {stats:{total:D.users.length, active:D.users.filter(u => u.status === "ACTIVE").length, blocked:D.users.filter(u => u.status === "BLOCKED").length, verified:D.users.filter(u => u.emailVerifiedAt).length, roles:D.roles.length, permissions:D.perms.length},
+      registrationsPerDay:days.map((day, k) => ({day, count:D.users.filter(u => u.createdAt.slice(0, 10) === day).length + (k % 4 === 0 ? 1 : 0)})), recent:D.logs.slice(0, 8)};
+  }
+  if (path === "/settings") { if (m === "PUT") { Object.assign(D.settings, b); dlog("settings.update", me); } return D.settings; }
+  E("Topilmadi", 404);
+}
+
+/* ---------- Umumiy UI ---------- */
+function toast(t, type = "") { const el = document.createElement("div"); el.className = "toast " + type; el.textContent = t; $("#toasts").append(el); setTimeout(() => el.remove(), 4200); }
+function modal(html) { $("#modal").innerHTML = `<div class="ov" data-a="ovl"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`; }
+const closeModal = () => { $("#modal").innerHTML = ""; };
+const pill = s => { const [t, c] = ST[s]; return `<span class="pill ${c}">${t}</span>`; };
+const pager = (k, d) => { const n = Math.max(1, Math.ceil(d.total / d.pageSize)); return `<div class="pg"><span>Jami: ${d.total}</span><button class="btn s" data-a="pg" data-k="${k}" data-v="${d.page - 1}" ${d.page <= 1 ? "disabled" : ""}>Oldingi</button><span>${d.page} / ${n}</span><button class="btn s" data-a="pg" data-k="${k}" data-v="${d.page + 1}" ${d.page >= n ? "disabled" : ""}>Keyingi</button></div>`; };
+const theme = () => { const r = document.documentElement; r.dataset.theme = (r.dataset.theme || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light")) === "dark" ? "light" : "dark"; try { localStorage.setItem("theme", r.dataset.theme); } catch {} };
+try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+
+/* ---------- Ko’rinishlar ---------- */
+function authView() {
+  const t = S.tab, f = (n, l, ty = "text", ex = "") => `<label for="${n}">${l}</label><input id="${n}" name="${n}" type="${ty}" ${ex}>`;
+  const forms = {
+    login:`<form data-f="login">${f("email", "Email", "email", "required autocomplete=username")}${f("password", "Parol", "password", "required autocomplete=current-password")}<p style="margin-top:16px"><button class="btn p" style="width:100%" type="submit">Kirish</button></p></form>`,
+    register:`<form data-f="register">${f("fullName", "Ism-familiya", "text", "required")}${f("email", "Email", "email", "required")}${f("phone", "Telefon (ixtiyoriy)", "text")}${f("password", "Parol (kamida 10 belgi, katta/kichik harf, raqam)", "password", "required autocomplete=new-password")}${f("confirmPassword", "Parolni tasdiqlang", "password", "required autocomplete=new-password")}<p style="margin-top:16px"><button class="btn p" style="width:100%" type="submit">Ro’yxatdan o’tish</button></p></form>`,
+    forgot:`<form data-f="forgot">${f("email", "Email", "email", "required")}<p style="margin-top:16px"><button class="btn p" style="width:100%" type="submit">Tiklash havolasini yuborish</button></p></form>`,
+    reset:`<form data-f="reset">${f("password", "Yangi parol", "password", "required autocomplete=new-password")}${f("confirmPassword", "Parolni tasdiqlang", "password", "required autocomplete=new-password")}<p style="margin-top:16px"><button class="btn p" style="width:100%" type="submit">Parolni yangilash</button></p></form>`,
+    verified:`<div class="empty">${S.msg || ""}<p style="margin-top:14px"><button class="btn p" data-a="tab" data-t="login">Kirish sahifasiga</button></p></div>`};
+  const tabs = ["login","register","forgot"].includes(t) ? `<div class="tabs">${[["login","Kirish"],["register","Ro’yxatdan o’tish"],["forgot","Parolni unutdim"]].map(([k, l]) => `<button data-a="tab" data-t="${k}" class="${t === k ? "on" : ""}">${l}</button>`).join("")}</div>` : "";
+  return `<div class="auth"><div class="acard"><h1>Axborot tizimi</h1><p style="color:var(--mut)">Foydalanuvchilar va ruxsatlarni boshqarish</p>${tabs}${forms[t]}${S.demo ? `<p style="margin-top:14px;font-size:13px;color:var(--mut)">Demo: admin@example.uz / Admin12345</p>` : ""}</div></div>`;
+}
+function shell() {
+  const nav = NAV.filter(n => can(n[2])).map(n => `<button class="nav ${S.page === n[0] ? "on" : ""}" data-a="nav" data-p="${n[0]}">${n[1]}</button>`).join("");
+  const body = S.err ? `<div class="card empty">${esc(S.err)}</div>` : !S.d ? `<div class="empty">Yuklanmoqda…</div>` : (VIEWS[S.page] || (() => ""))(S.d);
+  return `${S.demo ? `<div class="banner">Demo rejim: ma’lumotlar xotirada, serverga yozilmaydi va ruxsatlar server tomonida tekshirilmaydi.</div>` : ""}
+  <div class="shell"><aside class="side ${S.open ? "open" : ""}"><div class="brand">Axborot tizimi</div>${nav}<div class="sp"></div><button class="nav" data-a="theme">Rejim: yorug’ / qorong’u</button><button class="nav" data-a="logout">Chiqish</button></aside>
+  <main class="main"><div class="top"><button class="btn burger" data-a="burger" aria-label="Menyu">Menyu</button><div class="grow"><h1>${NAV.find(n => n[0] === S.page)?.[1] || ""}</h1><span style="color:var(--mut);font-size:13px">${esc(S.me.fullName)} (${esc(S.me.roles.join(", "))})</span></div></div>${body}</main></div>`;
+}
+const VIEWS = {
+  dashboard(d) {
+    const s = d.stats, c = [["Jami foydalanuvchilar", s.total], ["Faol", s.active], ["Bloklangan", s.blocked], ["Tasdiqlangan email", s.verified], ["Rollar", s.roles], ["Ruxsatlar", s.permissions]];
+    const mx = Math.max(1, ...d.registrationsPerDay.map(x => x.count));
+    return `<div class="stats">${c.map(([l, v]) => `<div class="card stat"><b>${v}</b><span>${l}</span></div>`).join("")}</div>
+    <div class="two"><div class="card"><h2>Ro’yxatdan o’tganlar (14 kun)</h2><div class="bars">${d.registrationsPerDay.map(x => `<i title="${x.day}: ${x.count}" style="height:${x.count / mx * 100}%"></i>`).join("")}</div><div class="bl">${d.registrationsPerDay.map(x => `<span>${x.day.slice(8)}</span>`).join("")}</div></div>
+    <div class="card"><h2>Oxirgi faoliyat</h2>${d.recent.length ? d.recent.map(l => `<p style="padding:6px 0;border-bottom:1px solid var(--bd)"><b>${esc(l.action)}</b><br><span style="color:var(--mut);font-size:13px">${esc(l.actor?.email || "tizim")}, ${fmt(l.createdAt)}</span></p>`).join("") : `<div class="empty">Hozircha faoliyat yo’q</div>`}</div></div>`;
+  },
+  users(d) {
+    return `<div class="card"><div class="bar"><input type="search" id="qu" placeholder="Ism yoki email bo’yicha qidirish" value="${esc(S.q.users)}"><select id="qs"><option value="">Barcha holatlar</option>${Object.entries(ST).map(([k, v]) => `<option value="${k}" ${S.q.st === k ? "selected" : ""}>${v[0]}</option>`).join("")}</select><button class="btn p" data-a="usearch">Qidirish</button></div>
+    <div class="tw"><table><thead><tr><th>Foydalanuvchi</th><th>Rollar</th><th>Holat</th><th>Oxirgi kirish</th><th></th></tr></thead><tbody>${d.items.map(u => `<tr><td><b>${esc(u.fullName)}</b><br><span style="color:var(--mut);font-size:13px">${esc(u.email)}</span></td><td>${u.roles.map(r => `<span class="pill">${esc(r.displayName)}</span>`).join("")}</td><td>${pill(u.status)}</td><td>${fmt(u.lastLoginAt)}</td>
+    <td>${can("users:update") ? `<button class="btn s" data-a="uroles" data-id="${u.id}">Rollar</button> <button class="btn s" data-a="ustatus" data-id="${u.id}" data-s="${u.status === "BLOCKED" ? "ACTIVE" : "BLOCKED"}">${u.status === "BLOCKED" ? "Faollashtirish" : "Bloklash"}</button> ` : ""}${can("users:delete") ? `<button class="btn s d" data-a="udel" data-id="${u.id}">O’chirish</button>` : ""}</td></tr>`).join("") || `<tr><td colspan="5" class="empty">Foydalanuvchi topilmadi. Qidiruvni o’zgartiring.</td></tr>`}</tbody></table></div>${pager("users", d)}</div>`;
+  },
+  roles(d) {
+    return `<div class="card tw"><table><thead><tr><th>Rol</th><th>Daraja</th><th>Foydalanuvchilar</th><th>Ruxsatlar</th><th></th></tr></thead><tbody>${d.roles.map(r => `<tr><td><b>${esc(r.displayName)}</b><br><span style="color:var(--mut);font-size:13px">${esc(r.name)}</span></td><td>${r.level}</td><td>${r.userCount}</td><td>${r.permissionIds.length}</td><td><button class="btn s" data-a="rperms" data-id="${r.id}">${can("roles:update") ? "Ruxsatlar matritsasi" : "Ko’rish"}</button></td></tr>`).join("")}</tbody></table></div>`;
+  },
+  permissions(d) {
+    const g = {}; d.forEach(p => (g[p.resource] ??= []).push(p.action));
+    return `<div class="card tw"><table><thead><tr><th>Resurs</th><th>Amallar</th></tr></thead><tbody>${Object.entries(g).map(([r, a]) => `<tr><td><b>${esc(RES_UZ[r] || r)}</b><br><span style="color:var(--mut);font-size:13px">${esc(r)}</span></td><td>${a.map(x => `<span class="pill">${esc(ACT_UZ[x] || x)}</span>`).join("")}</td></tr>`).join("")}</tbody></table></div>`;
+  },
+  logs(d) {
+    return `<div class="card"><div class="bar"><input type="search" id="ql" placeholder="Amal yoki email bo’yicha qidirish" value="${esc(S.q.logs)}"><button class="btn p" data-a="lsearch">Qidirish</button></div><div class="tw"><table><thead><tr><th>Vaqt</th><th>Amal</th><th>Foydalanuvchi</th><th>IP</th></tr></thead><tbody>${d.items.map(l => `<tr><td>${fmt(l.createdAt)}</td><td><b>${esc(l.action)}</b></td><td>${esc(l.actor?.email || "tizim")}</td><td>${esc(l.ip || "—")}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">Yozuv topilmadi</td></tr>`}</tbody></table></div>${pager("logs", d)}</div>`;
+  },
+  settings(d) {
+    const ro = !can("settings:update");
+    return `<div class="card" style="max-width:520px"><form data-f="settings"><label for="siteName">Tizim nomi</label><input id="siteName" name="siteName" type="text" value="${esc(d.siteName)}" ${ro ? "disabled" : ""}><label class="sw" style="color:var(--tx);font-size:15px"><input type="checkbox" name="registrationEnabled" ${d.registrationEnabled ? "checked" : ""} ${ro ? "disabled" : ""}>Ro’yxatdan o’tishga ruxsat berish</label>${ro ? "" : `<p style="margin-top:16px"><button class="btn p" type="submit">Sozlamalarni saqlash</button></p>`}</form></div>`;
+  },
+  profile(d) {
+    return `<div class="two"><div class="card"><h2>Shaxsiy ma’lumotlar</h2><form data-f="profile"><label for="fn">Ism-familiya</label><input id="fn" name="fullName" type="text" value="${esc(d.fullName)}" required><label for="ph">Telefon</label><input id="ph" name="phone" type="text" value="${esc(d.phone || "")}"><label>Email</label><input type="text" value="${esc(d.email)}" disabled><p style="margin-top:16px"><button class="btn p" type="submit">Saqlash</button></p></form></div>
+    <div class="card"><h2>Parolni almashtirish</h2><form data-f="pass"><label for="cp">Joriy parol</label><input id="cp" name="currentPassword" type="password" required autocomplete="current-password"><label for="np">Yangi parol</label><input id="np" name="newPassword" type="password" required autocomplete="new-password"><label for="np2">Tasdiqlang</label><input id="np2" name="confirmPassword" type="password" required autocomplete="new-password"><p style="margin-top:16px"><button class="btn p" type="submit">Parolni almashtirish</button></p></form></div></div>`;
+  }
+};
+
+/* ---------- Ma’lumot yuklash ---------- */
+async function load() {
+  S.d = null; S.err = null; render();
+  try {
+    const p = S.page;
+    if (p === "dashboard") S.d = await api("GET", "/dashboard");
+    else if (p === "users") S.d = await api("GET", `/users?page=${S.pg.users}&q=${encodeURIComponent(S.q.users)}${S.q.st ? "&status=" + S.q.st : ""}`);
+    else if (p === "roles") S.d = {roles:await api("GET", "/roles")};
+    else if (p === "permissions") S.d = await api("GET", "/permissions");
+    else if (p === "logs") S.d = await api("GET", `/audit-logs?page=${S.pg.logs}&q=${encodeURIComponent(S.q.logs)}`);
+    else if (p === "settings") S.d = await api("GET", "/settings");
+    else S.d = await api("GET", "/profile");
+  } catch (e) { S.err = e.status === 403 ? "Bu bo’limga kirish uchun ruxsatingiz yo’q." : e.message; }
+  render();
+}
+function render() { $("#app").innerHTML = S.me ? shell() : authView(); }
+async function boot() {
+  try { S.me = await api("GET", "/auth/me"); } catch { S.me = null; }
+  if (S.me) { S.page = NAV.find(n => can(n[2]))?.[0] || "profile"; await load(); } else render();
+}
+
+/* ---------- Harakatlar ---------- */
+const A = {
+  tab: d => { S.tab = d.t; render(); },
+  nav: d => { S.page = d.p; S.open = false; load(); },
+  burger: () => { S.open = !S.open; render(); },
+  theme,
+  ovl: (d, e) => { if (e.target.classList.contains("ov")) closeModal(); },
+  close: closeModal,
+  pg: d => { S.pg[d.k] = +d.v; load(); },
+  usearch: () => { S.q.users = $("#qu").value; S.q.st = $("#qs").value; S.pg.users = 1; load(); },
+  lsearch: () => { S.q.logs = $("#ql").value; S.pg.logs = 1; load(); },
+  logout: async () => { try { await api("POST", "/auth/logout"); } catch {} S.me = null; S.tab = "login"; render(); },
+  ustatus: async d => { try { await api("PUT", `/users/${d.id}/status`, {status:d.s}); toast("Holat yangilandi"); load(); } catch (e) { toast(e.message, "err"); } },
+  udel: d => modal(`<h2>Foydalanuvchini o’chirish</h2><p>Bu amalni qaytarib bo’lmaydi. Foydalanuvchi tizimga kira olmaydi, tarixi audit logda qoladi.</p><p style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" data-a="close">Bekor qilish</button><button class="btn p" data-a="udel2" data-id="${d.id}">O’chirish</button></p>`),
+  udel2: async d => { try { await api("DELETE", `/users/${d.id}`); closeModal(); toast("Foydalanuvchi o’chirildi"); load(); } catch (e) { closeModal(); toast(e.message, "err"); } },
+  uroles: async d => {
+    try {
+      const [roles, u] = await Promise.all([api("GET", "/roles"), api("GET", `/users/${d.id}`).catch(() => S.d.items.find(x => x.id === d.id))]);
+      const have = u.roles.map(r => r.id);
+      modal(`<h2>Rollar: ${esc(u.fullName)}</h2><form data-f="uroles"><input type="hidden" name="id" value="${d.id}">${roles.map(r => `<label class="chk"><input type="checkbox" name="roleIds" value="${r.id}" ${have.includes(r.id) ? "checked" : ""}>${esc(r.displayName)}</label>`).join("")}<p style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end"><button type="button" class="btn" data-a="close">Bekor qilish</button><button class="btn p" type="submit">Saqlash</button></p></form>`);
+    } catch (e) { toast(e.message, "err"); }
+  },
+  rperms: async d => {
+    try {
+      const perms = await api("GET", "/permissions"), r = S.d.roles.find(x => x.id === d.id), ro = !can("roles:update");
+      const g = {}; perms.forEach(p => (g[p.resource] ??= {})[p.action] = p.id);
+      let m = `<div class="mx"><div class="h r">Resurs</div>${ACTS.map(a => `<div class="h">${ACT_UZ[a]}</div>`).join("")}`;
+      for (const [res, acts] of Object.entries(g)) { m += `<div class="r">${esc(RES_UZ[res] || res)}</div>` + ACTS.map(a => acts[a] ? `<div><input type="checkbox" name="permissionIds" value="${acts[a]}" aria-label="${esc(res)} ${a}" ${r.permissionIds.includes(acts[a]) ? "checked" : ""} ${ro ? "disabled" : ""}></div>` : `<div class="na">–</div>`).join(""); }
+      modal(`<h2>${esc(r.displayName)}: ruxsatlar matritsasi</h2><p style="color:var(--mut);margin-bottom:12px">“Boshqarish” shu resursdagi barcha amallarni qamrab oladi. Faqat o’zingizda bor ruxsatni bera olasiz.</p><form data-f="rperms"><input type="hidden" name="id" value="${r.id}"><div class="tw">${m}</div></div><p style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end"><button type="button" class="btn" data-a="close">${ro ? "Yopish" : "Bekor qilish"}</button>${ro ? "" : `<button class="btn p" type="submit">Saqlash</button>`}</p></form>`);
+    } catch (e) { toast(e.message, "err"); }
+  }
+};
+document.addEventListener("click", e => { const a = e.target.closest("[data-a]"); if (a && A[a.dataset.a]) A[a.dataset.a](a.dataset, e); });
+
+const F = {
+  login: async d => { await api("POST", "/auth/login", d); await boot(); },
+  register: async d => { await api("POST", "/auth/register", d); S.tab = "login"; render(); toast(S.demo ? "Demo: email yuborilmaydi, hisob tasdiqlanmagan holatda yaratildi" : "Tasdiqlash havolasi emailingizga yuborildi"); },
+  forgot: async d => { await api("POST", "/auth/forgot-password", d); toast("Agar hisob mavjud bo’lsa, havola yuborildi"); },
+  reset: async d => { await api("POST", "/auth/reset-password", {...d, token:S.token}); history.replaceState(null, "", location.pathname); S.tab = "login"; render(); toast("Parol yangilandi. Qaytadan kiring"); },
+  profile: async d => { await api("PATCH", "/profile", {fullName:d.fullName, phone:d.phone || null}); toast("Profil saqlandi"); S.me.fullName = d.fullName; load(); },
+  pass: async (d, f) => { await api("POST", "/profile/password", d); f.reset(); toast("Parol almashtirildi"); },
+  settings: async (d, f) => { await api("PUT", "/settings", {siteName:d.siteName, registrationEnabled:f.registrationEnabled.checked}); toast("Sozlamalar saqlandi"); },
+  uroles: async (d, f) => { await api("PUT", `/users/${d.id}/roles`, {roleIds:[...f.querySelectorAll("[name=roleIds]:checked")].map(x => x.value)}); closeModal(); toast("Rollar yangilandi"); load(); },
+  rperms: async (d, f) => { await api("PUT", `/roles/${d.id}/permissions`, {permissionIds:[...f.querySelectorAll("[name=permissionIds]:checked")].map(x => x.value)}); closeModal(); toast("Ruxsatlar saqlandi"); load(); }
+};
+async function submitForm(f) {
+  if (f.dataset.busy || !f.reportValidity()) return;
+  const b = f.querySelector("button[type=submit]"); f.dataset.busy = "1"; if (b) b.disabled = true;
+  let er = f.querySelector(".ferr"); if (er) er.textContent = "";
+  try { await F[f.dataset.f](Object.fromEntries(new FormData(f)), f); }
+  catch (x) {
+    const msg = x instanceof TypeError ? "Serverga ulanib bo’lmadi. Internetni tekshiring" : x.message;
+    toast(msg, "err");
+    if (f.isConnected) { er = f.querySelector(".ferr"); if (!er) { er = document.createElement("p"); er.className = "ferr"; er.setAttribute("role", "alert"); (b ? b.parentElement : f).before(er); } er.textContent = msg; }
+  } finally { delete f.dataset.busy; if (b) b.disabled = false; }
+}
+// Tugma bosilishi to’g’ridan-to’g’ri ishlanadi: sandbox’dagi oynalarda brauzer "submit" hodisasini bloklashi mumkin
+document.addEventListener("click", e => { const b = e.target.closest("button[type=submit]"); const f = b && b.closest("form[data-f]"); if (f) { e.preventDefault(); submitForm(f); } });
+document.addEventListener("keydown", e => { const f = e.key === "Enter" && e.target.matches("input:not([type=checkbox])") && e.target.closest("form[data-f]"); if (f) { e.preventDefault(); submitForm(f); } });
+document.addEventListener("submit", e => { const f = e.target.closest("form[data-f]"); if (f) { e.preventDefault(); submitForm(f); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+/* ---------- Ishga tushirish ---------- */
+(async () => {
+  if (location.protocol === "file:") S.demo = true;
+  else try { S.demo = !(await fetch("/api/health")).ok; } catch { S.demo = true; }
+  const sp = new URLSearchParams(location.search);
+  if (sp.get("verify")) {
+    S.tab = "verified";
+    try { await api("POST", "/auth/verify-email", {token:sp.get("verify")}); S.msg = "Email tasdiqlandi. Endi tizimga kirishingiz mumkin."; } catch (e) { S.msg = e.message + ". Kirish sahifasidan yangi havola so’rang."; }
+    history.replaceState(null, "", location.pathname); render(); return;
+  }
+  if (sp.get("reset")) { S.token = sp.get("reset"); S.tab = "reset"; render(); return; }
+  boot();
+})();
+</script>
+</body>
+</html>
